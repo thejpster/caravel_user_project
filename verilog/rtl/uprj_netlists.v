@@ -24,5 +24,7 @@
     `include "gl/user_proj_example.v"
 `else
     `include "user_project_wrapper.v"
-    `include "user_proj_example.v"
+    `include "zube/src/zube_wrapper.v"
+    `include "zube/src/zube.v"
+    `include "zube/src/data_register.v"
 `endif
