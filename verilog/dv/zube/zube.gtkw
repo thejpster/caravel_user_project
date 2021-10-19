@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sun Oct 17 23:01:20 2021
+[*] Tue Oct 19 20:12:35 2021
 [*]
 [dumpfile] "/home/jonathan/Documents/zero_to_asic/tools/caravel_user_project/verilog/dv/zube/zube.vcd"
-[dumpfile_mtime] "Sun Oct 17 22:59:45 2021"
-[dumpfile_size] 123671714
+[dumpfile_mtime] "Tue Oct 19 20:11:39 2021"
+[dumpfile_size] 338078759
 [savefile] "/home/jonathan/Documents/zero_to_asic/tools/caravel_user_project/verilog/dv/zube/zube.gtkw"
-[timestart] 232109000
+[timestart] 0
 [size] 1280 736
 [pos] -1 -1
-*-17.957966 232875001 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.493330 232875001 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] zube_tb.
 [treeopen] zube_tb.uut.
 [treeopen] zube_tb.uut.mprj.
