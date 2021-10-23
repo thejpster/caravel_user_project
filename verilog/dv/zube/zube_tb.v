@@ -42,15 +42,19 @@ module zube_tb;
 	wire [7:0] z80_data_bus_in;
 	wire z80_write_strobe_b;
 	wire z80_read_strobe_b;
+	wire z80_ioreq_b;
+	wire z80_m1;
 
 	// 0-7 are management
 	assign mprj_io[15:8] = z80_address_bus;
 	// These are bidirectional
 	assign mprj_io[23:16] = z80_data_bus_in;
 	wire [7:0] z80_data_bus_out = mprj_io[23:16];
-	assign mprj_io[24] = z80_write_strobe_b;
+	wire z80_bus_dir = mprj_io[24];
 	assign mprj_io[25] = z80_read_strobe_b;
-	wire z80_bus_dir = mprj_io[26];
+	assign mprj_io[26] = z80_write_strobe_b;
+	assign mprj_io[27] = z80_m1;
+	assign mprj_io[28] = z80_ioreq_b;
 	// 27 and higher are unused
 	/////
 

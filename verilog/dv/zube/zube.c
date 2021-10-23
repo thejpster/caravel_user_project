@@ -42,7 +42,7 @@ void main()
 
 	*/
 
-    // 8 inputs for Z80 Address Bus
+	// 8 inputs for Z80 Address Bus
 	reg_mprj_io_8 =   GPIO_MODE_USER_STD_INPUT_NOPULL;
 	reg_mprj_io_9 =   GPIO_MODE_USER_STD_INPUT_NOPULL;
 	reg_mprj_io_10 =  GPIO_MODE_USER_STD_INPUT_NOPULL;
@@ -62,50 +62,53 @@ void main()
 	reg_mprj_io_22 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
 	reg_mprj_io_23 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
 
-	// 3 control signals
+	// 5 control signals (not the wrapper goes from 27:0, not 35:8 like we do)
 
-    // 3 outputs for PWM, starting at 8
-	reg_mprj_io_24 =  GPIO_MODE_USER_STD_INPUT_NOPULL;
+	// .z80_bus_dir(io_out[16]),
+	reg_mprj_io_24 =  GPIO_MODE_USER_STD_OUTPUT;
+	// .z80_read_strobe_b(io_in[17]),
 	reg_mprj_io_25 =  GPIO_MODE_USER_STD_INPUT_NOPULL;
-	reg_mprj_io_26 =  GPIO_MODE_USER_STD_OUTPUT;
+	// .z80_write_strobe_b(io_in[18]),
+	reg_mprj_io_26 =  GPIO_MODE_USER_STD_INPUT_NOPULL;
+	// .z80_m1(io_in[19]),
+	reg_mprj_io_27 =  GPIO_MODE_USER_STD_INPUT_NOPULL;
+	// .z80_ioreq_b(io_in[20]),
+	reg_mprj_io_28 =  GPIO_MODE_USER_STD_INPUT_NOPULL;
 
-    /* Apply configuration */
-    reg_mprj_xfer = 1;
-    while (reg_mprj_xfer == 1);
+	/* Apply configuration */
+	reg_mprj_xfer = 1;
+	while (reg_mprj_xfer == 1);
 
-    // reset design with 0bit of 1st bank of LA
-    reg_la0_data = 1;
-    reg_la0_oenb = 0;
-    reg_la0_iena = 0;
-    reg_la0_data = 0;
-    reg_la0_data = 1;
+	// reset design with 0bit of 1st bank of LA
+	reg_la0_data = 1;
+	reg_la0_oenb = 0;
+	reg_la0_iena = 0;
+	reg_la0_data = 0;
+	reg_la0_data = 1;
 
-    volatile uint32_t* const p_z80_base_address = (volatile uint32_t*) 0x30000000;
-    volatile uint32_t* const p_data = (volatile uint32_t*) 0x30000004;
-    volatile uint32_t* const p_status = (volatile uint32_t*) 0x30000008;
+	volatile uint32_t* const p_z80_base_address = (volatile uint32_t*) 0x30000000;
+	volatile uint32_t* const p_data = (volatile uint32_t*) 0x30000004;
+	volatile uint32_t* const p_control = (volatile uint32_t*) 0x30000008;
+	volatile uint32_t* const p_status = (volatile uint32_t*) 0x3000000C;
 
-    *p_z80_base_address = 0x81;
+	*p_z80_base_address = 0x81;
 
-    // no interrupt polling example
-    uint32_t last_status_out = 0;
-    uint32_t next_status_in = 0xAF;
-    while (true) {
-    	uint32_t new_status = *p_status;
-    	if (new_status != last_status_out)
-    	{
-    		last_status_out = new_status;
-    		// Echo the data back, inverted
-    		uint32_t new_data = *p_data;
-    		*p_data = (new_data ^ 0xFF) & 0xFF;
-    		// Flip the status marker so Z80 sees the new data
-    		if (next_status_in == 0xAF) {
-    			next_status_in = 0xBF;
-    		} else {
-    			next_status_in = 0xAF;
-    		}
-    		*p_status = next_status_in;
-    	}
-    }
+	// no interrupt polling example
+	while (true) {
+		const uint32_t status = *p_status;
+		if (status & 0x00000001)
+		{
+			// Z80 has written to Data OUT, so echo the inverse
+			uint32_t value = *p_data;
+			*p_data = (value ^ 0xFF) & 0xFF;
+		}
+		if (status & 0x00000002)
+		{
+			// Z80 has written to Control OUT, so echo the inverse
+			uint32_t value = *p_control;
+			*p_control = (value ^ 0xFF) & 0xFF;
+		}
+	}
 }
 
 // End of file
