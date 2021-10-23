@@ -107,8 +107,7 @@ module user_project_wrapper #(
     .wb_data_in(wbs_dat_i),
     .wb_ack_out(wbs_ack_o),
     .wb_data_out(wbs_dat_o),
-    .irq_data_out(user_irq[0]),
-    .irq_status_out(user_irq[1])
+    .irq_out(user_irq[0])
 
     );
 
